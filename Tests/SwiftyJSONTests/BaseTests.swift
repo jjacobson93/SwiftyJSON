@@ -30,9 +30,10 @@ class BaseTests: XCTestCase {
     override func setUp() {
         
         super.setUp()
-        
-        if let file = Bundle(for:BaseTests.self).pathForResource("Tests", ofType: "json") {
-            self.testData = try? Data(contentsOf: URL(fileURLWithPath: file))
+
+        if let file = URL(string: "Resources/Tests.json", relativeTo: URL(string: #file))?.absoluteString {
+            self.testData = try! Data(contentsOf: URL(fileURLWithPath: file))
+            print("TestData: \(self.testData)")
         } else {
             XCTFail("Can't find the test JSON file")
         }
@@ -52,7 +53,7 @@ class BaseTests: XCTestCase {
         dictionary.setObject(NSNull(), forKey: "null" as NSString)
         _ = JSON(dictionary)
         do {
-            let object: AnyObject = try JSONSerialization.jsonObject(with: self.testData, options: [])
+            let object: Any = try JSONSerialization.jsonObject(with: self.testData, options: [])
             let json2 = JSON(object)
             XCTAssertEqual(json0, json2)
         } catch _ {
@@ -219,10 +220,20 @@ class BaseTests: XCTestCase {
     
     func testErrorHandle() {
         let json = JSON(data:self.testData)
+        guard json["wrong-type"].error != nil else {
+            XCTFail("Uh oh... no error but we should have error")
+            return
+        }
+
         if let _ = json["wrong-type"].string {
             XCTFail("Should not run into here")
         } else {
             XCTAssertEqual(json["wrong-type"].error!.code, SwiftyJSON.ErrorWrongType)
+        }
+
+        guard json["not-exist"].error != nil else {
+            XCTFail("Uh oh... no error but we should have error")
+            return
         }
 
         if let _ = json[0]["not-exist"].string {
