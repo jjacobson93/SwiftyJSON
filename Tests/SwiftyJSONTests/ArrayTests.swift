@@ -42,4 +42,10 @@ class ArrayTests: XCTestCase {
         XCTAssertEqual((json.array![0] as JSON).string!, "111")
         XCTAssertEqual((json.array![1] as JSON).string!, "222")
     }
+
+    func testMultiDimensionalArray() {
+        let array = [["1", "2", "3"], ["4", "5", "6"]]
+        let json = JSON(array)
+        XCTAssertEqual(json[0][0].string, "1")
+    }
 }

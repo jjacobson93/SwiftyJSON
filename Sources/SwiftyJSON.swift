@@ -59,7 +59,7 @@ public struct JSON {
     /**
     Creates a JSON using the data.
 
-    - parameter data:  The NSData used to convert to json.Top level object in data is an NSArray or NSDictionary
+    - parameter data:  The NSData used to convert to json.Top level object in data is an Array or Dictionary
     - parameter opt:   The JSON serialization reading options. `.AllowFragments` by default.
     - parameter error: error The NSErrorPointer used to return the error. `nil` by default.
 
@@ -91,7 +91,7 @@ public struct JSON {
     /**
     Creates a JSON using the object.
 
-    - parameter object:  The object must have the following properties: All objects are NSString/String, NSNumber/Int/Float/Double/Bool, NSArray/Array, NSDictionary/Dictionary, or NSNull; All dictionary keys are NSStrings/String; NSNumbers are not NaN or infinity.
+    - parameter object:  The object must have the following properties: All objects are String, NSNumber/Int/Float/Double/Bool, Array, Dictionary, or nil/NSNull; All dictionary keys are Strings; NSNumbers are not NaN or infinity.
 
     - returns: The created JSON
     */
@@ -684,11 +684,7 @@ extension JSON {
             }
         }
         set {
-            if let newValue = newValue {
-                self.object = NSString(string:newValue)
-            } else {
-                self.object = NSNull()
-            }
+            self.object = newValue
         }
     }
 
@@ -707,7 +703,7 @@ extension JSON {
             }
         }
         set {
-            self.object = NSString(string:newValue)
+            self.object = newValue
         }
     }
 }
